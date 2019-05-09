@@ -6,7 +6,13 @@ ZIP_DIR 	= zip
 TMP_DIR 	= tmp
 PRJ_NAME	= osz_installer
 
-CSC_FLAGS		= /nologo /utf8output
+FRAMEWORK_DIR_W	= C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\
+CSC_FLAGS		= /nologo \
+	/utf8output \
+	/r:$(FRAMEWORK_DIR_W)System.IO.Compression.ZipFile.dll \
+	/r:$(FRAMEWORK_DIR_W)System.IO.Compression.FileSystem.dll \
+	/r:$(FRAMEWORK_DIR_W)netstandard.dll
+
 DEBUG_FLAGS		= 
 RELEASE_FLAGS	= /t:winexe
 

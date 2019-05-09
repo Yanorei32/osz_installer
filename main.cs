@@ -56,7 +56,7 @@ class OSZInstaller {
 	}
 
 	static bool getBoolByString(string str, bool defaultValue) {
-		return (str == defaultValue ? "true" : "false") ? defaultValue : !defaultValue;
+		return (str == (!defaultValue ? "true" : "false")) ? !defaultValue : defaultValue;
 	}
 
 	static Configure getConfigureByIni() {
@@ -81,15 +81,15 @@ class OSZInstaller {
 				"osu! beatmap directory not found."
 			);
 
-		string removeFileAfterInstallStr = getIniValue(
-			iniPath,
-			"advanced",
-			"removeFileAfterInstall",
-			"true"
+		bool removeFileAfterInstall= getBoolByString(
+			getIniValue(
+				iniPath,
+				"advanced",
+				"removeFileAfterInstall",
+				"true"
+			),
+			true
 		);
-
-		bool removeFileAfterInstall = true;
-		removeFileAfterInstall = !(removeFileAfterInstallStr == "false");
 
 		return new Configure(
 			songsDir,
@@ -98,7 +98,6 @@ class OSZInstaller {
 	}
 
 	static void installOSZ(Configure c, string filePath) {
-		string fileName = Path.GetFileName(filePath);
 		string songName = Path.GetFileNameWithoutExtension(filePath);
 
 		if (!File.Exists(filePath))
@@ -114,7 +113,12 @@ class OSZInstaller {
 				"osu! beatmap already installed.\n" + songName
 			);
 
-		Console.WriteLine(songDirPath);
+		Directory.CreateDirectory(songDirPath);
+
+		ZipFile.ExtractToDirectory(
+			filePath,
+			songDirPath
+		);
 
 	}
 
@@ -131,8 +135,6 @@ class OSZInstaller {
 
 			}
 		}
-
-		Console.WriteLine("Hello World");
 	}
 }
 
