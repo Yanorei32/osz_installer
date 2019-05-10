@@ -98,6 +98,13 @@ class OSZInstaller {
 	}
 
 	static void installOSZ(Configure c, string filePath) {
+		string extension = Path.GetExtension(filePath);
+		if (extension != ".osz")
+			throw new Exception(
+				"This file extension is not 'osz'."
+			);
+
+
 		string songName = Path.GetFileNameWithoutExtension(filePath);
 
 		if (!File.Exists(filePath))
@@ -110,7 +117,7 @@ class OSZInstaller {
 
 		if (Directory.Exists(songDirPath))
 			throw new Exception(
-				"osu! beatmap already installed.\n" + songName
+				"osu! beatmap already installed."
 			);
 
 		Directory.CreateDirectory(songDirPath);
@@ -120,21 +127,36 @@ class OSZInstaller {
 			songDirPath
 		);
 
+		if (c.RemoveFileAfterInstall)
+			File.Delete(filePath);
+
 	}
 
 	static void Main(string[] Args) {
 		Configure c = getConfigureByIni();
 
+		int processed = 0;
 		foreach (string filePath in Args) {
 			try {
 				installOSZ(c, filePath);
 
 			} catch (Exception e) {
-				MessageBox.Show(e.ToString());
+				MessageBox.Show(string.Format(
+					"Exception asserted in {0}\n----\n{1}",
+					Path.GetFileName(filePath),
+					e.ToString()
+				));
 				continue;
-
 			}
+
+			processed++;
 		}
+
+		MessageBox.Show(string.Format(
+			(Args.Length - processed == 0) ? "{0} Processed normaly." : "{0} Processed normaly.\n{1} Error(s).",
+			processed,
+			Args.Length - processed
+		));
 	}
 }
 
