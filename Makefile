@@ -9,6 +9,7 @@ PRJ_NAME	= osz_installer
 FRAMEWORK_DIR_W	= C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\
 CSC_FLAGS		= /nologo \
 	/utf8output \
+	/win32icon:res\\osz_installer.ico \
 	/r:$(FRAMEWORK_DIR_W)System.IO.Compression.ZipFile.dll \
 	/r:$(FRAMEWORK_DIR_W)System.IO.Compression.FileSystem.dll \
 	/r:$(FRAMEWORK_DIR_W)netstandard.dll
