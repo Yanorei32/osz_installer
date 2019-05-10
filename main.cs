@@ -122,10 +122,15 @@ class OSZInstaller {
 
 		Directory.CreateDirectory(songDirPath);
 
-		ZipFile.ExtractToDirectory(
-			filePath,
-			songDirPath
-		);
+		try {
+			ZipFile.ExtractToDirectory(
+				filePath,
+				songDirPath
+			);
+		} catch (Exception e) {
+			Directory.Delete(songDirPath);
+			throw e;
+		}
 
 		if (c.RemoveFileAfterInstall)
 			File.Delete(filePath);
